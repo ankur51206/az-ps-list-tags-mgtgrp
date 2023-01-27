@@ -1,4 +1,4 @@
-$mg = Get-AzManagementGroup -GroupName '296a2a1e-c1ca-475f-aaea-3d1bcf9eab8d'
+$mg = Get-AzManagementGroup -GroupName '296a2a1e-c1ca-475f-aaea-aaaaaa'
 $subscriptions = Get-AzSubscription | Where-Object { $_.TenantId -eq $mg.TenantId }
 
 # Connect to Azure using an interactive login
