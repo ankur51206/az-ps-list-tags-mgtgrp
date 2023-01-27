@@ -19,3 +19,7 @@ foreach ($subscription in $subscriptions) {
 
 # Format the output as a table
 $output | Format-Table -AutoSize
+
+
+# Export the output to a CSV file
+$output | Export-Csv -Path "C:\path\to\subscription_tags.csv" -NoTypeInformation
