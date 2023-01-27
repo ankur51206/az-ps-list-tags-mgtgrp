@@ -7,6 +7,7 @@ $output = @()
 # Iterate through the subscriptions, retrieve their tags, and add them to the output array
 foreach ($subscription in $subscriptions) {
     $subsTags = (Get-AzSubscription -SubscriptionId $subscription.Id).Tags
+    if($subsTags -ne $null){
     foreach ($tag in $subsTags.GetEnumerator()) {
         $subscriptionTag = [PSCustomObject]@{
             SubscriptionID = $subscription.Id
@@ -15,6 +16,7 @@ foreach ($subscription in $subscriptions) {
         }
         $output += $subscriptionTag
     }
+}
 }
 
 # Format the output as a table
