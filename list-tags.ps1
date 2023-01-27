@@ -1,23 +1,33 @@
-$mg = Get-AzManagementGroup -GroupName '296a2a1e-c1ca-475f-aaea-aaaaaaaaa'
+$mg = Get-AzManagementGroup -GroupName '296a2a1e-c1ca-475f-aaea-3d1bcf9eab8d'
 $subscriptions = Get-AzSubscription | Where-Object { $_.TenantId -eq $mg.TenantId }
 
-# Create an empty array to store the output data
-$output = @()
+# Get all subscriptions
+$subscriptions = Get-AzSubscription
 
-# Iterate through the subscriptions, retrieve their tags, and add them to the output array
+# Create an empty array to hold the subscription tag information
+$subscriptionTags = @()
+
 foreach ($subscription in $subscriptions) {
-    $subsTags = (Get-AzSubscription -SubscriptionId $subscription.Id).Tags
-    if($subsTags -ne $null){
-    foreach ($tag in $subsTags.GetEnumerator()) {
-        $subscriptionTag = [PSCustomObject]@{
-            SubscriptionID = $subscription.Id
-            TagKey         = $tag.Key
-            TagValue       = $tag.Value
+    # Check if the subscription has tags
+    if($subscription.Tags -ne $null) {
+        # Iterate through each tag and add the subscription ID, tag name, and tag value to the array
+        foreach ($tag in $subscription.Tags.GetEnumerator()) {
+            $subscriptionTag = [PSCustomObject]@{
+                SubscriptionId = $subscription.Id
+                TagName = $tag.Key
+                TagValue = $tag.Value
+            }
+            $subscriptionTags += $subscriptionTag
         }
-        $output += $subscriptionTag
+    }else {
+        $subscriptionTag = [PSCustomObject]@{
+                SubscriptionId = $subscription.Id
+                TagName = "null"
+                TagValue = "null"
+            }
+            $subscriptionTags += $subscriptionTag
     }
 }
-}
 
-# Format the output as a table
-$output | Format-Table -AutoSize
+# Format the array as a table and output to the console
+$subscriptionTags | Format-Table
