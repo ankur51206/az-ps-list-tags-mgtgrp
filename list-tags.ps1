@@ -15,13 +15,16 @@ foreach ($subscription in $subscriptions) {
     if($subscription.Tags -ne $null) {
         # Iterate through each tag and add the subscription ID, tag name, subscription name and tag value to the array
         foreach ($tag in $subscription.Tags.GetEnumerator()) {
-            $subscriptionTag = [PSCustomObject]@{
-                SubscriptionId = $subscription.Id
-                SubscriptionName = $subscription.Name
-                TagName = $tag.Key
-                TagValue = $tag.Value
+            # Check if the tag name is equal to "my-tag"
+            if ($tag.Key -eq "my-tag") {
+                $subscriptionTag = [PSCustomObject]@{
+                    SubscriptionId = $subscription.Id
+                    SubscriptionName = $subscription.Name
+                    TagName = $tag.Key
+                    TagValue = $tag.Value
+                }
+                $subscriptionTags += $subscriptionTag
             }
-            $subscriptionTags += $subscriptionTag
         }
     }else {
         $subscriptionTag = [PSCustomObject]@{
